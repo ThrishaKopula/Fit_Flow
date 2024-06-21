@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSHealthShareUsageDescription</key>
+	<string>This app needs access to your heart rate data to display real-time BPM.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>This app needs access to your heart rate data to display real-time BPM.</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+	</dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>1f65223760dc4f6db1fdd22c2cd3b44a</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>
