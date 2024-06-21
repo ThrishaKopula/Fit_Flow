@@ -18,8 +18,10 @@
 		F68112A82C2606E200155423 /* NotificationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F68112A72C2606E200155423 /* NotificationExtension.swift */; };
 		F68112AA2C2606FA00155423 /* HealthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F68112A92C2606FA00155423 /* HealthManager.swift */; };
 		F68112AC2C26070E00155423 /* SpotifyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F68112AB2C26070E00155423 /* SpotifyService.swift */; };
-		F68112B32C26164E00155423 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F68112B22C26164E00155423 /* WebView.swift */; };
 		F68112B52C261B1E00155423 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F68112B42C261B1E00155423 /* LoginView.swift */; };
+		F68112B72C262D7900155423 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F68112B62C262D7900155423 /* WebView.swift */; };
+		F68112B92C262DF800155423 /* WebViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F68112B82C262DF800155423 /* WebViewCoordinator.swift */; };
+		F68112BB2C2631D100155423 /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F68112BA2C2631D100155423 /* SafariView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,8 +60,10 @@
 		F68112AB2C26070E00155423 /* SpotifyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyService.swift; sourceTree = "<group>"; };
 		F68112AD2C26078400155423 /* Fit_Flow.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Fit_Flow.entitlements; sourceTree = "<group>"; };
 		F68112B12C260C5500155423 /* Fit-Flow-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Fit-Flow-Info.plist"; sourceTree = SOURCE_ROOT; };
-		F68112B22C26164E00155423 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		F68112B42C261B1E00155423 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		F68112B62C262D7900155423 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		F68112B82C262DF800155423 /* WebViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewCoordinator.swift; sourceTree = "<group>"; };
+		F68112BA2C2631D100155423 /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,7 +144,9 @@
 				F68112A72C2606E200155423 /* NotificationExtension.swift */,
 				F68112A92C2606FA00155423 /* HealthManager.swift */,
 				F68112AB2C26070E00155423 /* SpotifyService.swift */,
-				F68112B22C26164E00155423 /* WebView.swift */,
+				F68112B62C262D7900155423 /* WebView.swift */,
+				F68112B82C262DF800155423 /* WebViewCoordinator.swift */,
+				F68112BA2C2631D100155423 /* SafariView.swift */,
 			);
 			path = Fit_Flow;
 			sourceTree = "<group>";
@@ -347,13 +353,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F68112B92C262DF800155423 /* WebViewCoordinator.swift in Sources */,
+				F68112BB2C2631D100155423 /* SafariView.swift in Sources */,
 				F68112AC2C26070E00155423 /* SpotifyService.swift in Sources */,
 				F68112B52C261B1E00155423 /* LoginView.swift in Sources */,
 				F68112A82C2606E200155423 /* NotificationExtension.swift in Sources */,
 				F68112802C26044300155423 /* ContentView.swift in Sources */,
-				F68112B32C26164E00155423 /* WebView.swift in Sources */,
 				F681127E2C26044300155423 /* Fit_FlowApp.swift in Sources */,
 				F68112AA2C2606FA00155423 /* HealthManager.swift in Sources */,
+				F68112B72C262D7900155423 /* WebView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

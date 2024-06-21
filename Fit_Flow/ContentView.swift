@@ -1,24 +1,35 @@
 import SwiftUI
+import WebKit
+import Alamofire
+
+import SwiftUI
 
 struct ContentView: View {
     @StateObject private var spotifyService = SpotifyService.shared
+    @StateObject private var healthManager = HealthManager()
     @State private var playlistsText = ""
-    @State private var bpmText = ""
+    @State private var heartRateText = ""
 
     var body: some View {
         VStack {
             Text(playlistsText)
                 .padding()
-            Text(bpmText)
+
+            Text(heartRateText)
                 .padding()
         }
         .onAppear {
-            spotifyService.getUserPlaylists { playlists in
-                if let playlists = playlists, let firstPlaylist = playlists.first {
-                    fetchTracksAndBPM(for: firstPlaylist.id)
-                } else {
-                    playlistsText = "Failed to fetch playlists"
-                }
+            fetchPlaylists()
+            fetchHeartRate()
+        }
+    }
+
+    private func fetchPlaylists() {
+        spotifyService.getUserPlaylists { playlists in
+            if let playlists = playlists, let firstPlaylist = playlists.first {
+                fetchTracksAndBPM(for: firstPlaylist.id)
+            } else {
+                playlistsText = "Failed to fetch playlists"
             }
         }
     }
@@ -44,6 +55,16 @@ struct ContentView: View {
                 }
             } else {
                 playlistsText = "Failed to fetch tracks"
+            }
+        }
+    }
+
+    private func fetchHeartRate() {
+        healthManager.fetchHeartRate { heartRate in
+            if let heartRate = heartRate {
+                heartRateText = "Current Heart Rate: \(heartRate) bpm"
+            } else {
+                heartRateText = "Failed to fetch heart rate"
             }
         }
     }

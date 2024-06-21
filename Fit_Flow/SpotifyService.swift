@@ -101,6 +101,7 @@ class SpotifyService: ObservableObject {
     }
 
     func getAuthorizationURL() -> URL? {
+        print("in authorization")
         var components = URLComponents(string: "https://accounts.spotify.com/authorize")
         components?.queryItems = [
             URLQueryItem(name: "client_id", value: clientID),
