@@ -6,6 +6,7 @@ struct LoginView: View {
     @State private var webView: WKWebView?
     @State private var authenticated = false
     @State private var webViewCoordinator: WebViewCoordinator?
+    @State private var showingSafariView = false
 
     var body: some View {
         Group {
@@ -30,7 +31,7 @@ struct LoginView: View {
                         .foregroundColor(.white)
                         .cornerRadius(8)
                 }
-                .sheet(isPresented: .constant(true)) {
+                .sheet(isPresented: $showingSafariView) {
                     if let url = spotifyService.getAuthorizationURL() {
                         SafariView(url: url)
                     }
@@ -43,11 +44,12 @@ struct LoginView: View {
     }
 
     private func initiateSpotifyLogin() {
-        guard let url = spotifyService.getAuthorizationURL() else { return }
-        webView = WKWebView()
-        webViewCoordinator = WebViewCoordinator(didFinish: handleWebViewFinishedLoading)
-        webView?.navigationDelegate = webViewCoordinator
-        webView?.load(URLRequest(url: url))
+        showingSafariView = true
+//        guard let url = spotifyService.getAuthorizationURL() else { return }
+//        webView = WKWebView()
+//        webViewCoordinator = WebViewCoordinator(didFinish: handleWebViewFinishedLoading)
+//        webView?.navigationDelegate = webViewCoordinator
+//        webView?.load(URLRequest(url: url))
     }
 
     private func handleWebViewFinishedLoading(_ webView: WKWebView) {
