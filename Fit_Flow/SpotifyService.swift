@@ -28,7 +28,9 @@ class SpotifyService: ObservableObject {
     }
 
     func getUserPlaylists(completion: @escaping ([Playlist]?) -> Void) {
+        print("trying to get user playlists")
         guard let accessToken = accessToken else {
+            print("in in here?")
             completion(nil)
             return
         }
@@ -42,13 +44,15 @@ class SpotifyService: ObservableObject {
             .responseDecodable(of: PlaylistsResponse.self) { response in
                 switch response.result {
                 case .success(let playlistsResponse):
+                    print("gottem!")
                     completion(playlistsResponse.items)
                 case .failure(let error):
-                    print("Error fetching playlists: \(error)")
+                    print("Error fetching playlists: \(error.localizedDescription)")
                     completion(nil)
                 }
             }
     }
+
 
     func getPlaylistTracks(playlistID: String, completion: @escaping ([TrackItem]?) -> Void) {
         guard let accessToken = accessToken else {

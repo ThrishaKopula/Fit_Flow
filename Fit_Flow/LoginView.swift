@@ -1,26 +1,15 @@
 import SwiftUI
-import WebKit
+import SafariServices
 
 struct LoginView: View {
     @StateObject private var spotifyService = SpotifyService.shared
-    @State private var webView: WKWebView?
     @State private var authenticated = false
-    @State private var webViewCoordinator: WebViewCoordinator?
     @State private var showingSafariView = false
 
     var body: some View {
         Group {
-            NavigationLink(
-                destination: ContentView(),
-                isActive: $authenticated,
-                label: {
-                    EmptyView()
-                }
-            )
-            .hidden()
-
-            if webView != nil {
-                WebView(webView: $webView, didFinish: handleWebViewFinishedLoading)
+            if authenticated {
+                ContentView()
             } else {
                 Button(action: {
                     initiateSpotifyLogin()
@@ -31,7 +20,9 @@ struct LoginView: View {
                         .foregroundColor(.white)
                         .cornerRadius(8)
                 }
-                .sheet(isPresented: $showingSafariView) {
+                .sheet(isPresented: $showingSafariView, onDismiss: {
+                    handleSpotifyLoginSuccess()
+                }) {
                     if let url = spotifyService.getAuthorizationURL() {
                         SafariView(url: url)
                     }
@@ -44,28 +35,23 @@ struct LoginView: View {
     }
 
     private func initiateSpotifyLogin() {
-        showingSafariView = true
-//        guard let url = spotifyService.getAuthorizationURL() else { return }
-//        webView = WKWebView()
-//        webViewCoordinator = WebViewCoordinator(didFinish: handleWebViewFinishedLoading)
-//        webView?.navigationDelegate = webViewCoordinator
-//        webView?.load(URLRequest(url: url))
-    }
-
-    private func handleWebViewFinishedLoading(_ webView: WKWebView) {
-        guard let urlString = webView.url?.absoluteString else { return }
-        if urlString.starts(with: "https://thrishakopula.github.io/") {
-            handleSpotifyLoginSuccess()
-        }
+        showingSafariView = true // Show the SafariView sheet for Spotify login
     }
 
     private func handleSpotifyLoginSuccess() {
+        print("in suceess")
         spotifyService.login { success in
             if success {
-                authenticated = true
-                webView = nil
-                webViewCoordinator = nil
+                print("success")
+                authenticated = true // Update authenticated state
+                showingSafariView = false // Dismiss the SafariView sheet
             }
         }
+    }
+}
+
+struct LoginView_Previews: PreviewProvider {
+    static var previews: some View {
+        LoginView()
     }
 }
