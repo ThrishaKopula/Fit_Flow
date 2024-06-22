@@ -26,6 +26,7 @@ class SpotifyService {
 
     func exchangeCodeForToken(code: String, completion: @escaping (Bool) -> Void) {
         guard let url = URL(string: tokenURL) else {
+            print("Invalid token URL")
             completion(false)
             return
         }
@@ -43,11 +44,14 @@ class SpotifyService {
             case .success(let data):
                 if let json = data as? [String: Any], let accessToken = json["access_token"] as? String {
                     self.accessToken = accessToken
+                    print("Access token fetched: \(accessToken)")
                     completion(true)
                 } else {
+                    print("Failed to parse access token")
                     completion(false)
                 }
-            case .failure:
+            case .failure(let error):
+                print("Token exchange request failed with error: \(error)")
                 completion(false)
             }
         }
@@ -55,6 +59,7 @@ class SpotifyService {
 
     func getUserPlaylists(completion: @escaping ([Playlist]?) -> Void) {
         guard let accessToken = accessToken else {
+            print("No access token available")
             completion(nil)
             return
         }
@@ -66,8 +71,11 @@ class SpotifyService {
         AF.request(playlistsURL, headers: headers).responseDecodable(of: PlaylistsResponse.self) { response in
             switch response.result {
             case .success(let playlistsResponse):
-                completion(playlistsResponse.items)
-            case .failure:
+                let playlists = playlistsResponse.items.map { Playlist(id: $0.id, name: $0.name) }
+                print("Fetched playlists: \(playlists.map { $0.name })")
+                completion(playlists)
+            case .failure(let error):
+                print("Failed to fetch playlists: \(error)")
                 completion(nil)
             }
         }
@@ -75,6 +83,7 @@ class SpotifyService {
 
     func getPlaylistTracks(playlistID: String, completion: @escaping ([Track]?) -> Void) {
         guard let accessToken = accessToken else {
+            print("No access token available")
             completion(nil)
             return
         }
@@ -87,8 +96,11 @@ class SpotifyService {
         AF.request(url, headers: headers).responseDecodable(of: TracksResponse.self) { response in
             switch response.result {
             case .success(let tracksResponse):
-                completion(tracksResponse.items.map { $0.track })
-            case .failure:
+                let tracks = tracksResponse.items.map { Track(id: $0.track.id, name: $0.track.name) }
+                print("Fetched tracks for playlist \(playlistID): \(tracks.map { $0.name })")
+                completion(tracks)
+            case .failure(let error):
+                print("Failed to fetch tracks: \(error)")
                 completion(nil)
             }
         }
@@ -96,6 +108,7 @@ class SpotifyService {
 
     func getTrackDetails(trackID: String, completion: @escaping (TrackDetails?) -> Void) {
         guard let accessToken = accessToken else {
+            print("No access token available")
             completion(nil)
             return
         }
@@ -108,41 +121,44 @@ class SpotifyService {
         AF.request(url, headers: headers).responseDecodable(of: TrackDetails.self) { response in
             switch response.result {
             case .success(let trackDetails):
+                print("Fetched track details for \(trackID): tempo \(trackDetails.tempo)")
                 completion(trackDetails)
-            case .failure:
+            case .failure(let error):
+                print("Failed to fetch track details: \(error)")
                 completion(nil)
             }
         }
     }
 }
-
-struct PlaylistsResponse: Decodable {
-    let items: [Playlist]
-}
-
-struct Playlist: Decodable {
+struct Playlist {
     let id: String
     let name: String
 }
 
-struct TracksResponse: Decodable {
+struct Track {
+    let id: String
+    let name: String
+}
+
+struct PlaylistsResponse: Codable {
+    let items: [PlaylistItem]
+}
+
+struct PlaylistItem: Codable {
+    let id: String
+    let name: String
+}
+
+struct TracksResponse: Codable {
     let items: [TrackItem]
 }
 
-struct TrackItem: Decodable {
-    let track: Track
+struct TrackItem: Codable {
+    let track: TrackDetails
 }
 
-struct Track: Decodable {
+struct TrackDetails: Codable {
     let id: String
     let name: String
-    let artists: [Artist]
-}
-
-struct Artist: Decodable {
-    let name: String
-}
-
-struct TrackDetails: Decodable {
     let tempo: Double
 }
