@@ -11,6 +11,7 @@
 		F612156A2C26AFD0000C3CF0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61215692C26AFD0000C3CF0 /* AppDelegate.swift */; };
 		F612156C2C26B010000C3CF0 /* SpotifyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F612156B2C26B010000C3CF0 /* SpotifyView.swift */; };
 		F612156E2C26B029000C3CF0 /* HealthKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F612156D2C26B029000C3CF0 /* HealthKitView.swift */; };
+		F61215752C26B64B000C3CF0 /* ActivityCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61215742C26B64B000C3CF0 /* ActivityCard.swift */; };
 		F681127E2C26044300155423 /* Fit_FlowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F681127D2C26044300155423 /* Fit_FlowApp.swift */; };
 		F68112802C26044300155423 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F681127F2C26044300155423 /* ContentView.swift */; };
 		F68112822C26044400155423 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F68112812C26044400155423 /* Assets.xcassets */; };
@@ -46,6 +47,7 @@
 		F61215692C26AFD0000C3CF0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F612156B2C26B010000C3CF0 /* SpotifyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyView.swift; sourceTree = "<group>"; };
 		F612156D2C26B029000C3CF0 /* HealthKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitView.swift; sourceTree = "<group>"; };
+		F61215742C26B64B000C3CF0 /* ActivityCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCard.swift; sourceTree = "<group>"; };
 		F681127A2C26044300155423 /* Fit_Flow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fit_Flow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F681127D2C26044300155423 /* Fit_FlowApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fit_FlowApp.swift; sourceTree = "<group>"; };
 		F681127F2C26044300155423 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -124,6 +126,14 @@
 			path = API;
 			sourceTree = "<group>";
 		};
+		F61215732C26B63B000C3CF0 /* Cards */ = {
+			isa = PBXGroup;
+			children = (
+				F61215742C26B64B000C3CF0 /* ActivityCard.swift */,
+			);
+			path = Cards;
+			sourceTree = "<group>";
+		};
 		F68112712C26044300155423 = {
 			isa = PBXGroup;
 			children = (
@@ -153,6 +163,7 @@
 				F61215692C26AFD0000C3CF0 /* AppDelegate.swift */,
 				F61215702C26B500000C3CF0 /* API */,
 				F612156F2C26B4D8000C3CF0 /* Views */,
+				F61215732C26B63B000C3CF0 /* Cards */,
 				F68112B12C260C5500155423 /* Fit-Flow-Info.plist */,
 				F68112AD2C26078400155423 /* Fit_Flow.entitlements */,
 				F68112812C26044400155423 /* Assets.xcassets */,
@@ -368,6 +379,7 @@
 				F612156E2C26B029000C3CF0 /* HealthKitView.swift in Sources */,
 				F68112AC2C26070E00155423 /* SpotifyService.swift in Sources */,
 				F612156C2C26B010000C3CF0 /* SpotifyView.swift in Sources */,
+				F61215752C26B64B000C3CF0 /* ActivityCard.swift in Sources */,
 				F68112802C26044300155423 /* ContentView.swift in Sources */,
 				F681127E2C26044300155423 /* Fit_FlowApp.swift in Sources */,
 				F68112AA2C2606FA00155423 /* HealthManager.swift in Sources */,

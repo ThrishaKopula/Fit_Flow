@@ -4,7 +4,7 @@ import WebKit
 struct SpotifyView: View {
     @State private var showWebView = true
     @State private var playlists: [String] = []
-    @State private var bpm: String = "Fetching BPM..."
+    @State public var bpm: String = "Fetching BPM..."
 
     var body: some View {
         VStack {
@@ -15,20 +15,47 @@ struct SpotifyView: View {
                     }
             } else {
                 
-                
-                
-                List(playlists, id: \.self) { playlist in
-                    Text(playlist)
+                ZStack {
+                    Color.white.edgesIgnoringSafeArea(.all) // Background color
+                    
+                    GeometryReader { geometry in
+                        VStack {
+                            HStack {
+                                Spacer()
+                                // RoundedBox directly within the VStack
+                                Color(uiColor: .systemGray6)
+                                    .cornerRadius(20)
+                                    .shadow(radius: 5)
+                                    .overlay(
+                                        VStack {
+                                            Image(systemName: "heart.fill")
+                                                .foregroundColor(.red)
+                                                .padding()
+                                                .font(.system(size: 40))
+                                            Text(bpm)
+                                                .foregroundColor(.black)
+                                                .bold()
+                                                .font(.system(size: 30))
+                                        }
+                                    )
+                                    .frame(width: 150, height: 150)
+                                    .padding(.top, 20)
+                                    .padding(.trailing, 20)
+                                    
+                            }
+                            Spacer()
+                        }
+                    }
                 }
-                Text(bpm)
-                    .font(.largeTitle)
-                    .padding()
+//                List(playlists, id: \.self) { playlist in
+//                    Text(playlist)
+//                }
             }
         }
         .onAppear {
             HealthManager.shared.fetchHeartRate { rate in
                 DispatchQueue.main.async {
-                    self.bpm = "\(Int(rate ?? 0)) bpm"
+                    self.bpm = "\(Int(rate ?? 0)) BPM"
                 }
             }
         }
@@ -42,6 +69,7 @@ struct SpotifyView: View {
         }
         showWebView = false
     }
+    
 }
 
 struct WebViewWrapper: UIViewRepresentable {
@@ -88,3 +116,45 @@ struct WebViewWrapper: UIViewRepresentable {
         }
     }
 }
+
+//struct ActivityCard: View {
+//    var body: some View {
+//        ZStack {
+//            Color.white.edgesIgnoringSafeArea(.all) // Background color
+//            
+//            GeometryReader { geometry in
+//                VStack {
+//                    HStack {
+//                        Spacer()
+//                        RoundedBox()
+//                            .frame(width: 150, height: 150)
+//                            .padding(.top, 20)
+//                            .padding(.trailing, 20)
+//                    }
+//                    Spacer()
+//                }
+//            }
+//        }
+//    }
+//}
+
+struct RoundedBox: View {
+    var body: some View {
+        Color.blue
+            .cornerRadius(20)
+            .overlay(
+                VStack {
+                    Image(systemName: "heart.fill")
+                        .foregroundColor(.red).padding()
+                    Text(SpotifyView().bpm)
+                        .foregroundColor(.white)
+                        .bold()
+                }
+            )
+    }
+}
+
+#Preview {
+    SpotifyView()
+}
+
