@@ -14,6 +14,9 @@ struct SpotifyView: View {
                         fetchPlaylists()
                     }
             } else {
+                
+                
+                
                 List(playlists, id: \.self) { playlist in
                     Text(playlist)
                 }
@@ -37,6 +40,7 @@ struct SpotifyView: View {
                 self.playlists = playlists?.map { $0.name } ?? ["Failed to fetch playlists"]
             }
         }
+        showWebView = false
     }
 }
 
