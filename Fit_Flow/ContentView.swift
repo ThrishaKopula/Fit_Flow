@@ -9,8 +9,16 @@ struct ContentView: View {
     @StateObject private var healthManager = HealthManager()
     @State private var playlistsText = ""
     @State private var heartRateText = ""
+    @State public var currBPM = ""
 
     var body: some View {
+        
+        VStack {
+            LazyVGrid(columns: Array(repeating: GridItem(spacing: 40), count: 2), content: {
+                ActivityCard()
+    
+            })
+        }
         VStack {
             Text(playlistsText)
                 .padding()
@@ -19,8 +27,12 @@ struct ContentView: View {
                 .padding()
         }
         .onAppear {
-            fetchPlaylists()
-            fetchHeartRate()
+            if spotifyService.authenticated {
+                fetchPlaylists()
+                fetchHeartRate()
+            } else {
+                Text("unable to fetch anything rip")
+            }
         }
     }
 
@@ -63,9 +75,15 @@ struct ContentView: View {
         healthManager.fetchHeartRate { heartRate in
             if let heartRate = heartRate {
                 heartRateText = "Current Heart Rate: \(heartRate) bpm"
+                currBPM = String(heartRate)
             } else {
                 heartRateText = "Failed to fetch heart rate"
             }
         }
     }
 }
+
+#Preview {
+    ContentView()
+}
+

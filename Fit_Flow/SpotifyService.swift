@@ -26,6 +26,18 @@ class SpotifyService: ObservableObject {
         authenticated = true
         completion(true)
     }
+    
+    func getAuthorizationURL() -> URL? {
+        print("in authorization")
+        var components = URLComponents(string: "https://accounts.spotify.com/authorize")
+        components?.queryItems = [
+            URLQueryItem(name: "client_id", value: clientID),
+            URLQueryItem(name: "response_type", value: "code"),
+            URLQueryItem(name: "redirect_uri", value: redirectURI),
+            URLQueryItem(name: "scope", value: "playlist-read-private user-read-private")
+        ]
+        return components?.url
+    }
 
     func getUserPlaylists(completion: @escaping ([Playlist]?) -> Void) {
         print("trying to get user playlists")
@@ -102,18 +114,6 @@ class SpotifyService: ObservableObject {
                     completion(nil)
                 }
             }
-    }
-
-    func getAuthorizationURL() -> URL? {
-        print("in authorization")
-        var components = URLComponents(string: "https://accounts.spotify.com/authorize")
-        components?.queryItems = [
-            URLQueryItem(name: "client_id", value: clientID),
-            URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "redirect_uri", value: redirectURI),
-            URLQueryItem(name: "scope", value: "playlist-read-private user-read-private")
-        ]
-        return components?.url
     }
 }
 
