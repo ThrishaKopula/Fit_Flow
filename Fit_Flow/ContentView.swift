@@ -27,12 +27,8 @@ struct ContentView: View {
                 .padding()
         }
         .onAppear {
-            if spotifyService.authenticated {
-                fetchPlaylists()
-                fetchHeartRate()
-            } else {
-                Text("unable to fetch anything rip")
-            }
+            fetchPlaylists()
+            fetchHeartRate()
         }
     }
 
