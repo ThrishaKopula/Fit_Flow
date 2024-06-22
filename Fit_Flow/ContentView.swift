@@ -1,85 +1,27 @@
 import SwiftUI
-import WebKit
-import Alamofire
-
-import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var spotifyService = SpotifyService.shared
-    @StateObject private var healthManager = HealthManager()
-    @State private var playlistsText = ""
-    @State private var heartRateText = ""
-    @State public var currBPM = ""
-
     var body: some View {
-        
-        VStack {
-            LazyVGrid(columns: Array(repeating: GridItem(spacing: 40), count: 2), content: {
-                ActivityCard()
-    
-            })
-        }
-        VStack {
-            Text(playlistsText)
-                .padding()
-
-            Text(heartRateText)
-                .padding()
-        }
-        .onAppear {
-            fetchPlaylists()
-            fetchHeartRate()
-        }
-    }
-
-    private func fetchPlaylists() {
-        spotifyService.getUserPlaylists { playlists in
-            if let playlists = playlists, let firstPlaylist = playlists.first {
-                fetchTracksAndBPM(for: firstPlaylist.id)
-            } else {
-                playlistsText = "Failed to fetch playlists"
-            }
-        }
-    }
-
-    private func fetchTracksAndBPM(for playlistID: String) {
-        spotifyService.getPlaylistTracks(playlistID: playlistID) { tracks in
-            if let tracks = tracks {
-                var formattedText = "Playlist:\n\n"
-                let group = DispatchGroup()
-                for track in tracks {
-                    group.enter()
-                    spotifyService.getTrackDetails(trackID: track.track.id) { trackDetails in
-                        if let trackDetails = trackDetails {
-                            formattedText += "\(track.track.name) - BPM: \(trackDetails.tempo ?? 0)\n"
-                        } else {
-                            formattedText += "Failed to fetch track details\n"
-                        }
-                        group.leave()
-                    }
+        NavigationView {
+            VStack {
+                NavigationLink(destination: SpotifyView()) {
+                    Text("Login with Spotify")
+                        .font(.title)
+                        .padding()
+                        .background(Color.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
                 }
-                group.notify(queue: .main) {
-                    playlistsText = formattedText
+                NavigationLink(destination: HealthKitView()) {
+                    Text("Health Data")
+                        .font(.title)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
                 }
-            } else {
-                playlistsText = "Failed to fetch tracks"
             }
-        }
-    }
-
-    private func fetchHeartRate() {
-        healthManager.fetchHeartRate { heartRate in
-            if let heartRate = heartRate {
-                heartRateText = "Current Heart Rate: \(heartRate) bpm"
-                currBPM = String(heartRate)
-            } else {
-                heartRateText = "Failed to fetch heart rate"
-            }
+            .navigationTitle("Home")
         }
     }
 }
-
-#Preview {
-    ContentView()
-}
-

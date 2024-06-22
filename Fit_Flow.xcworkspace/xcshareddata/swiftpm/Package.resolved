@@ -1,0 +1,24 @@
+{
+  "originHash" : "030443093db5ca70bfea66dcbc5e9610d5ebed5fef3d67e546616771449232cc",
+  "pins" : [
+    {
+      "identity" : "alamofire",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Alamofire/Alamofire",
+      "state" : {
+        "revision" : "f455c2975872ccd2d9c81594c658af65716e9b9a",
+        "version" : "5.9.1"
+      }
+    },
+    {
+      "identity" : "ios-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/spotify/ios-sdk",
+      "state" : {
+        "branch" : "master",
+        "revision" : "55fd4a65b1b7fb483b583e6032168e1dc85ed178"
+      }
+    }
+  ],
+  "version" : 3
+}

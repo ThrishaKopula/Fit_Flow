@@ -9,10 +9,11 @@ import SwiftUI
 
 @main
 struct Fit_FlowApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
     var body: some Scene {
         WindowGroup {
-            LoginView()
-//            ContentView()
+            ContentView()
         }
     }
 }

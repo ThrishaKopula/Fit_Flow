@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		56D3BE794A9B1B129941F08B /* Pods_Fit_Flow.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8019B0B7FFC678B436679D4C /* Pods_Fit_Flow.framework */; };
+		F612156A2C26AFD0000C3CF0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61215692C26AFD0000C3CF0 /* AppDelegate.swift */; };
+		F612156C2C26B010000C3CF0 /* SpotifyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F612156B2C26B010000C3CF0 /* SpotifyView.swift */; };
+		F612156E2C26B029000C3CF0 /* HealthKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F612156D2C26B029000C3CF0 /* HealthKitView.swift */; };
 		F681127E2C26044300155423 /* Fit_FlowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F681127D2C26044300155423 /* Fit_FlowApp.swift */; };
 		F68112802C26044300155423 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F681127F2C26044300155423 /* ContentView.swift */; };
 		F68112822C26044400155423 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F68112812C26044400155423 /* Assets.xcassets */; };
@@ -46,6 +49,9 @@
 		1117D134E5222ED98F2C8DC9 /* Pods-Fit_Flow.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fit_Flow.debug.xcconfig"; path = "Target Support Files/Pods-Fit_Flow/Pods-Fit_Flow.debug.xcconfig"; sourceTree = "<group>"; };
 		6BD628C0A0796A7C23520473 /* Pods-Fit_Flow.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fit_Flow.release.xcconfig"; path = "Target Support Files/Pods-Fit_Flow/Pods-Fit_Flow.release.xcconfig"; sourceTree = "<group>"; };
 		8019B0B7FFC678B436679D4C /* Pods_Fit_Flow.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Fit_Flow.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F61215692C26AFD0000C3CF0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F612156B2C26B010000C3CF0 /* SpotifyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyView.swift; sourceTree = "<group>"; };
+		F612156D2C26B029000C3CF0 /* HealthKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitView.swift; sourceTree = "<group>"; };
 		F681127A2C26044300155423 /* Fit_Flow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fit_Flow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F681127D2C26044300155423 /* Fit_FlowApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fit_FlowApp.swift; sourceTree = "<group>"; };
 		F681127F2C26044300155423 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -150,6 +156,9 @@
 				F68112B82C262DF800155423 /* WebViewCoordinator.swift */,
 				F68112BA2C2631D100155423 /* SafariView.swift */,
 				F68112BC2C26503500155423 /* ActivityCard.swift */,
+				F61215692C26AFD0000C3CF0 /* AppDelegate.swift */,
+				F612156B2C26B010000C3CF0 /* SpotifyView.swift */,
+				F612156D2C26B029000C3CF0 /* HealthKitView.swift */,
 			);
 			path = Fit_Flow;
 			sourceTree = "<group>";
@@ -271,6 +280,7 @@
 			mainGroup = F68112712C26044300155423;
 			packageReferences = (
 				F68112AE2C26079F00155423 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				F61215682C26A66C000C3CF0 /* XCRemoteSwiftPackageReference "ios-sdk" */,
 			);
 			productRefGroup = F681127B2C26044300155423 /* Products */;
 			projectDirPath = "";
@@ -356,10 +366,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F612156A2C26AFD0000C3CF0 /* AppDelegate.swift in Sources */,
 				F68112B92C262DF800155423 /* WebViewCoordinator.swift in Sources */,
+				F612156E2C26B029000C3CF0 /* HealthKitView.swift in Sources */,
 				F68112BB2C2631D100155423 /* SafariView.swift in Sources */,
 				F68112AC2C26070E00155423 /* SpotifyService.swift in Sources */,
 				F68112B52C261B1E00155423 /* LoginView.swift in Sources */,
+				F612156C2C26B010000C3CF0 /* SpotifyView.swift in Sources */,
 				F68112BD2C26503500155423 /* ActivityCard.swift in Sources */,
 				F68112A82C2606E200155423 /* NotificationExtension.swift in Sources */,
 				F68112802C26044300155423 /* ContentView.swift in Sources */,
@@ -705,6 +718,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		F61215682C26A66C000C3CF0 /* XCRemoteSwiftPackageReference "ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/spotify/ios-sdk";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		F68112AE2C26079F00155423 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";

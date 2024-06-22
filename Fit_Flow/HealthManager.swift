@@ -1,18 +1,12 @@
-//
-//  HealthManager.swift
-//  Fit_Flow
-//
-//  Created by Thrisha Kopula on 6/21/24.
-//
-
 import Foundation
 import HealthKit
 
-class HealthManager: ObservableObject {
+class HealthManager {
+    static let shared = HealthManager()
     
     let healthStore = HKHealthStore()
     
-    init() {
+    private init() {
         authorizeHealthKit()
     }
     
@@ -66,4 +60,3 @@ class HealthManager: ObservableObject {
         healthStore.execute(query)
     }
 }
-
