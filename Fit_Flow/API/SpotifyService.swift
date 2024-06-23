@@ -90,6 +90,7 @@ class SpotifyService {
         }
         
         let url = tracksURL.replacingOccurrences(of: "{playlist_id}", with: playlistID)
+        
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(accessToken)"
         ]
@@ -97,10 +98,6 @@ class SpotifyService {
         AF.request(url, headers: headers).responseDecodable(of: TracksResponse.self) { response in
             switch response.result {
             case .success(let tracksResponse):
-                print("TRACKS RESPONSE: ", tracksResponse)
-//                let tracks = tracksResponse.items.map { Track(track: TrackObject(id: $0.track.track.id, name: $0.track.track.name)) }
-//                print(tracks)
-//                print("Fetched tracks for playlist \(playlistID): \(tracks.map { $0.track.name })")
                 completion(tracksResponse.items)
             case .failure(let error):
                 print("Failed to fetch tracks: \(error)")
@@ -110,6 +107,7 @@ class SpotifyService {
     }
 
     func getTrackDetails(trackID: String, completion: @escaping (TrackDetails?) -> Void) {
+        
         guard let accessToken = accessToken else {
             completion(nil)
             return
@@ -120,8 +118,8 @@ class SpotifyService {
         ]
 
         let url = trackDetailsURL.replacingOccurrences(of: "{track_id}", with: trackID)
-
         AF.request(url, headers: headers)
+        .validate()
         .responseDecodable(of: TrackDetails.self) { response in
             switch response.result {
             case .success(let trackDetails):
@@ -173,8 +171,4 @@ struct TrackObject: Codable {
 struct TrackDetails: Codable {
     let tempo: Double?
     let id: String?
-    let uri: String?
-    let track_href: String?
-    let duration_ms: Int?
-    let time_signature: Int?
 }

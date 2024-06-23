@@ -5,17 +5,15 @@ import Alamofire
 struct SpotifyView: View {
     @State private var showWebView = true
     @State private var playlists: [Playlist] = []
-    @State private var tracksWithTempo: [String: Double] = [:] // Track ID -> TrackWithTempo
+    @State private var tracksWithTempo: [String: Double] = [:]
     @State public var bpm: String = "Fetching BPM..."
 
     var body: some View {
-
         VStack {
             if showWebView {
                 WebViewWrapper()
                     .onReceive(NotificationCenter.default.publisher(for: .didReceiveSpotifyToken)) { _ in
                         print("Received Spotify token notification")
-//                        fetchAllTracksWithTempo()
                         didReceiveSpotifyToken()
                     }
             } else {
@@ -64,14 +62,12 @@ struct SpotifyView: View {
             }
         }
     }
-    
-    
+
+    //fetches for all the playlists
     func didReceiveSpotifyToken() {
-        // Fetch user playlists
         SpotifyService.shared.getUserPlaylists { playlists in
             guard let playlists = playlists else {
                 DispatchQueue.main.async {
-                    // Handle the case where playlists could not be fetched
                     print("Failed to fetch playlists")
                 }
                 return
@@ -79,23 +75,20 @@ struct SpotifyView: View {
 
             DispatchQueue.main.async {
                 if playlists.isEmpty {
-                    // Handle the case where no playlists are available
                     print("No playlists found")
                     return
                 }
 
-                // Create a dispatch group to wait for all fetch operations
                 let group = DispatchGroup()
 
                 for playlist in playlists {
                     group.enter()
-                    self.fetchTracksAndBPM(for: playlist.id) {
+                    fetchTracksAndBPM(for: playlist.id) {
                         group.leave()
                     }
                 }
 
                 group.notify(queue: .main) {
-                    // All fetch operations are complete
                     print("Fetched tracks for all playlists.")
                     // Perform any further UI updates or actions here
                 }
@@ -103,9 +96,6 @@ struct SpotifyView: View {
         }
     }
 
-
-    
-    
     private func fetchTracksAndBPM(for playlistID: String, completion: @escaping () -> Void) {
         SpotifyService.shared.getPlaylistTracks(playlistID: playlistID) { tracks in
             guard let tracks = tracks else {
@@ -118,96 +108,38 @@ struct SpotifyView: View {
 
             for track in tracks {
                 group.enter()
-                SpotifyService.shared.getTrackDetails(trackID: track.track.id) { trackDetails in
-                    if let trackDetails = trackDetails {
-                        print("\(track.track.name) - BPM: \(trackDetails.tempo)")
+                fetchTrackDetails(trackID: track.track.id) { tempo in
+                    if let tempo = tempo {
+                        DispatchQueue.main.async {
+                            self.tracksWithTempo[track.track.name] = tempo
+                            print("Track Name: \(track.track.name), Tempo: \(tempo)")
+                        }
                     } else {
-                        print("Failed to fetch track details for \(track.track.name)\n")
+                        print("Failed to fetch track details for \(track.track.name)")
                     }
                     group.leave()
                 }
             }
 
             group.notify(queue: .main) {
-                // Here you can use formattedText for UI updates, like assigning to a label or text view.
-                // e.g., self.yourLabel.text = formattedText
                 print("All track details have been fetched for playlist \(playlistID).")
+                DispatchQueue.main.async {
+                    self.showWebView = false
+                }
                 completion()
             }
         }
-        showWebView = false
     }
 
-
-
-
-    
-    
-    
-
-//    func fetchAllTracksWithTempo() {
-//        print("Fetching all tracks with tempo")
-//        SpotifyService.shared.getUserPlaylists { playlists in
-//            guard let playlists = playlists else {
-//                print("Failed to fetch playlists")
-//                return
-//            }
-//            
-//            let dispatchGroup = DispatchGroup()
-////            var allTracks: [TrackItem] = []
-//            var processedTrackIDs: Set<String> = []
-//            
-//            for playlist in playlists {
-//                dispatchGroup.enter()
-//                print("Fetching tracks for playlist!!: \(playlist.name)")
-//                SpotifyService.shared.getPlaylistTracks(playlistID: playlist.id) { tracks in
-//                    if let tracks = tracks {
-//                        DispatchQueue.main.async {
-//                            
-//                       
-//                            for track in tracks {
-//                                
-//                                    fetchTrackDetailsForTrack(trackID: track.track.id)
-//            
-//                            }
-//                        }
-//                    } else {
-//                        print("Failed to fetch tracks for playlist: \(playlist.name)")
-//                    }
-//                    dispatchGroup.leave()
-//                }
-//            }
-//            
-//            dispatchGroup.notify(queue: .main) {
-////                print("Fetched all tracks from playlists, total unique tracks: \(allTracks.count)")
-////                self.fetchTrackDetailsForTrack(tracks: allTracks)
-//            }
-//        }
-//        showWebView = false
-//    }
-
-//    private func fetchTrackDetailsForTrack(trackID: String) {
-//        let dispatchGroup = DispatchGroup()
-//        
-//        dispatchGroup.enter()
-////            print("Fetching details for track: \(track.name)")
-//        SpotifyService.shared.getTrackDetails(trackID: trackID) { trackDetails in
-//            if let trackDetails = trackDetails {
-//                DispatchQueue.main.async {
-//                    self.tracksWithTempo[trackID] = trackDetails.tempo
-//                    print("Track: \(trackID), Tempo: \(trackDetails.tempo)")
-//                }
-//            } else {
-//                print("Failed to fetch details for track: \(trackID)")
-//            }
-//            dispatchGroup.leave()
-//        }
-//        
-//        dispatchGroup.notify(queue: .main) {
-//            print("All tracks and their tempos fetched successfully.")
-//            print("Total number of tracks: \(self.tracksWithTempo.count)")
-//        }
-//    }
+    private func fetchTrackDetails(trackID: String, completion: @escaping (Double?) -> Void) {
+        SpotifyService.shared.getTrackDetails(trackID: trackID) { trackDetails in
+            guard let trackDetails = trackDetails else {
+                completion(nil)
+                return
+            }
+            completion(trackDetails.tempo)
+        }
+    }
 }
 
 struct WebViewWrapper: UIViewRepresentable {
@@ -252,10 +184,4 @@ struct WebViewWrapper: UIViewRepresentable {
             }
         }
     }
-}
-
-
-
-#Preview {
-    SpotifyView()
 }
