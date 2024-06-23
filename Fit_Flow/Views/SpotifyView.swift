@@ -5,7 +5,7 @@ import Alamofire
 struct SpotifyView: View {
     @State private var showWebView = true
     @State private var playlists: [Playlist] = []
-    @State private var tracksWithTempo: [String: Double] = [:]
+    @State private var tracksWithTempo: [String: Int] = [:]
     @State public var bpm: String = "Fetching BPM..."
 
     var body: some View {
@@ -150,7 +150,7 @@ struct SpotifyView: View {
                 fetchTrackDetails(trackID: track.track.id) { tempo in
                     if let tempo = tempo {
                         DispatchQueue.main.async {
-                            self.tracksWithTempo[track.track.name] = tempo
+                            self.tracksWithTempo[track.track.name] = Int(tempo)
                             print("Track Name: \(track.track.name), Tempo: \(tempo)")
                         }
                     } else {
