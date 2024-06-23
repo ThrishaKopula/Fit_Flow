@@ -64,6 +64,37 @@ struct SpotifyView: View {
     }
 
     //fetches for all the playlists
+//    func didReceiveSpotifyToken() {
+//        SpotifyService.shared.getUserPlaylists { playlists in
+//            guard let playlists = playlists else {
+//                DispatchQueue.main.async {
+//                    print("Failed to fetch playlists")
+//                }
+//                return
+//            }
+//
+//            DispatchQueue.main.async {
+//                if playlists.isEmpty {
+//                    print("No playlists found")
+//                    return
+//                }
+//
+//                let group = DispatchGroup()
+//
+//                for playlist in playlists {
+//                    group.enter()
+//                    fetchTracksAndBPM(for: playlist.id) {
+//                        group.leave()
+//                    }
+//                }
+//
+//                group.notify(queue: .main) {
+//                    print("Fetched tracks for all playlists.")
+//                    // Perform any further UI updates or actions here
+//                }
+//            }
+//        }
+//    }
     func didReceiveSpotifyToken() {
         SpotifyService.shared.getUserPlaylists { playlists in
             guard let playlists = playlists else {
@@ -79,22 +110,30 @@ struct SpotifyView: View {
                     return
                 }
 
+                // Save all playlists in a list
+                var playlistsList = playlists
+
                 let group = DispatchGroup()
 
-                for playlist in playlists {
+                // Fetch tracks for the first playlist
+                if let firstPlaylist = playlistsList.first {
                     group.enter()
-                    fetchTracksAndBPM(for: playlist.id) {
+                    fetchTracksAndBPM(for: firstPlaylist.id) {
                         group.leave()
                     }
+
+                    // Remove the first playlist from the list
+                    playlistsList.removeFirst()
                 }
 
                 group.notify(queue: .main) {
-                    print("Fetched tracks for all playlists.")
+                    print("Fetched tracks for the first playlist.")
                     // Perform any further UI updates or actions here
                 }
             }
         }
     }
+
 
     private func fetchTracksAndBPM(for playlistID: String, completion: @escaping () -> Void) {
         SpotifyService.shared.getPlaylistTracks(playlistID: playlistID) { tracks in
