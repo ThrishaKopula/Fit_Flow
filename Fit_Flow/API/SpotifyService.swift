@@ -72,7 +72,7 @@ class SpotifyService {
             switch response.result {
             case .success(let playlistsResponse):
                 let playlists = playlistsResponse.items.map { Playlist(id: $0.id, name: $0.name) }
-                print("Fetched playlists: \(playlists.map { $0.name })")
+//                print("Fetched playlists: \(playlists.map { $0.name })")
                 completion(playlists)
             case .failure(let error):
                 print("Failed to fetch playlists: \(error)")
@@ -81,7 +81,8 @@ class SpotifyService {
         }
     }
 
-    func getPlaylistTracks(playlistID: String, completion: @escaping ([Track]?) -> Void) {
+    func getPlaylistTracks(playlistID: String, completion: @escaping ([PlaylistTrackObject]?) -> Void) {
+        print("im in here")
         guard let accessToken = accessToken else {
             print("No access token available")
             completion(nil)
@@ -96,9 +97,11 @@ class SpotifyService {
         AF.request(url, headers: headers).responseDecodable(of: TracksResponse.self) { response in
             switch response.result {
             case .success(let tracksResponse):
-                let tracks = tracksResponse.items.map { Track(id: $0.track.id, name: $0.track.name) }
-                print("Fetched tracks for playlist \(playlistID): \(tracks.map { $0.name })")
-                completion(tracks)
+                print("TRACKS RESPONSE: ", tracksResponse)
+//                let tracks = tracksResponse.items.map { Track(track: TrackObject(id: $0.track.track.id, name: $0.track.track.name)) }
+//                print(tracks)
+//                print("Fetched tracks for playlist \(playlistID): \(tracks.map { $0.track.name })")
+                completion(tracksResponse.items)
             case .failure(let error):
                 print("Failed to fetch tracks: \(error)")
                 completion(nil)
@@ -108,36 +111,31 @@ class SpotifyService {
 
     func getTrackDetails(trackID: String, completion: @escaping (TrackDetails?) -> Void) {
         guard let accessToken = accessToken else {
-            print("No access token available")
             completion(nil)
             return
         }
-        
-        let url = trackDetailsURL.replacingOccurrences(of: "{track_id}", with: trackID)
+
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(accessToken)"
         ]
-        
-        AF.request(url, headers: headers).responseDecodable(of: TrackDetails.self) { response in
+
+        let url = trackDetailsURL.replacingOccurrences(of: "{track_id}", with: trackID)
+
+        AF.request(url, headers: headers)
+        .responseDecodable(of: TrackDetails.self) { response in
             switch response.result {
             case .success(let trackDetails):
-                print("Fetched track details for \(trackID): tempo \(trackDetails.tempo)")
+                print(trackDetails.tempo ?? "000")
                 completion(trackDetails)
             case .failure(let error):
-                print("Failed to fetch track details: \(error)")
+                print("Error fetching track details: \(error)")
+                if let data = response.data, let responseString = String(data: data, encoding: .utf8) {
+                    print("Response data: \(responseString)")
+                }
                 completion(nil)
             }
         }
     }
-}
-struct Playlist {
-    let id: String
-    let name: String
-}
-
-struct Track {
-    let id: String
-    let name: String
 }
 
 struct PlaylistsResponse: Codable {
@@ -149,16 +147,35 @@ struct PlaylistItem: Codable {
     let name: String
 }
 
-struct TracksResponse: Codable {
-    let items: [TrackItem]
+struct Playlist {
+    let id: String
+    let name: String
 }
 
-struct TrackItem: Codable {
-    let track: TrackDetails
+struct TracksResponse: Codable {
+    let items: [PlaylistTrackObject]
+}
+
+struct PlaylistTrackObject: Codable {
+    let track: Track
+}
+
+struct Track: Codable {
+//    let track: TrackObject
+    let id: String
+    let name: String
+}
+
+struct TrackObject: Codable {
+    let id: String
+    let name: String
 }
 
 struct TrackDetails: Codable {
-    let id: String
-    let name: String
-    let tempo: Double
+    let tempo: Double?
+    let id: String?
+    let uri: String?
+    let track_href: String?
+    let duration_ms: Int?
+    let time_signature: Int?
 }
