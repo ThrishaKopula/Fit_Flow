@@ -125,7 +125,6 @@ class SpotifyService {
         .responseDecodable(of: TrackDetails.self) { response in
             switch response.result {
             case .success(let trackDetails):
-                print(trackDetails.tempo ?? "000")
                 completion(trackDetails)
             case .failure(let error):
                 print("Error fetching track details: \(error)")
