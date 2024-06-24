@@ -5,7 +5,7 @@ import Alamofire
 struct SpotifyView: View {
     @State private var showWebView = true
     @State private var playlists: [Playlist] = []
-    @State private var tracksWithTempo: [String: Int] = ["looooooooooooooooooooooooooooooooooooooooooooooopong":72, "short":74]
+    @State private var tracksWithTempo: [String: Int] = ["track1":72, "track2":74]
     @State public var bpm: String = "Fetching BPM..."
     @State public var bpmNum: Int = 0
     @State private var currentTrack: Track?
