@@ -1,5 +1,6 @@
 import Foundation
 import Alamofire
+import SpotifyiOS
 
 class SpotifyService {
     static let shared = SpotifyService()
@@ -19,7 +20,7 @@ class SpotifyService {
             URLQueryItem(name: "client_id", value: clientID),
             URLQueryItem(name: "response_type", value: "code"),
             URLQueryItem(name: "redirect_uri", value: redirectURI),
-            URLQueryItem(name: "scope", value: "playlist-read-private user-read-private")
+            URLQueryItem(name: "scope", value: "playlist-read-private user-read-private user-modify-playback-state")
         ]
         return components?.url
     }
@@ -133,6 +134,7 @@ class SpotifyService {
             }
         }
     }
+    
 }
 
 struct PlaylistsResponse: Codable {
@@ -163,12 +165,43 @@ struct Track: Codable {
     let name: String
 }
 
-struct TrackObject: Codable {
-    let id: String
-    let name: String
-}
-
 struct TrackDetails: Codable {
     let tempo: Double?
     let id: String?
 }
+
+
+struct PlaybackStateResponse: Decodable {
+    let device: Device
+    let item: Track
+    let actions: StateActions
+}
+
+struct StateActions: Decodable {
+    let disallows: [String: Bool]
+    
+    var pausing: Bool {
+        return disallows["pausing"] ?? false
+    }
+    
+    var skippingNext: Bool {
+        return disallows["skipping_next"] ?? false
+    }
+    
+    var skippingPrev: Bool {
+        return disallows["skipping_prev"] ?? false
+    }
+}
+
+struct Device: Codable {
+    let id: String
+    let is_active: Bool
+    let is_private_session: Bool
+    let is_restricted: Bool
+    let name: String
+    let type: String
+    let volume_percent: Int
+    let supports_volume: Bool
+}
+
+

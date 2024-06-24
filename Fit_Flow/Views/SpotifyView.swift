@@ -7,6 +7,10 @@ struct SpotifyView: View {
     @State private var playlists: [Playlist] = []
     @State private var tracksWithTempo: [String: Int] = [:]
     @State public var bpm: String = "Fetching BPM..."
+    @State public var bpmNum: Int = 0
+    @State private var currentTrack: Track?
+    @State private var isPlaying = false
+    @State private var currMatchTracks: [String: Int] = [:]
 
     var body: some View {
         VStack {
@@ -24,7 +28,6 @@ struct SpotifyView: View {
                         VStack {
                             HStack {
                                 Spacer()
-                                // RoundedBox directly within the VStack
                                 Color(uiColor: .systemGray6)
                                     .cornerRadius(20)
                                     .shadow(radius: 5)
@@ -45,10 +48,11 @@ struct SpotifyView: View {
                                     .padding(.trailing, 20)
                             }
                             Spacer()
+                            
                         }
                     }
                 }
-                List(tracksWithTempo.sorted(by: { $0.key < $1.key }), id: \.key) { trackID, tempo in
+                List(currMatchTracks.sorted(by: { $0.key < $1.key }), id: \.key) { trackID, tempo in
                     Text("\(trackID) - \(tempo) BPM")
                 }
             }
@@ -57,6 +61,7 @@ struct SpotifyView: View {
             HealthManager.shared.fetchHeartRate { rate in
                 DispatchQueue.main.async {
                     self.bpm = "\(Int(rate ?? 0)) BPM"
+                    self.bpmNum = Int(rate ?? 0)
                     print("Heart rate fetched: \(self.bpm)")
                 }
             }
@@ -151,7 +156,7 @@ struct SpotifyView: View {
                     if let tempo = tempo {
                         DispatchQueue.main.async {
                             self.tracksWithTempo[track.track.name] = Int(tempo)
-                            print("Track Name: \(track.track.name), Tempo: \(tempo)")
+//                            print("Track Name: \(track.track.id), Tempo: \(tempo)")
                         }
                     } else {
                         print("Failed to fetch track details for \(track.track.name)")
@@ -166,6 +171,8 @@ struct SpotifyView: View {
                     self.showWebView = false
                 }
                 completion()
+                self.currMatchTracks = CalcBPM().findNearbyValues(dictionary: tracksWithTempo, input: self.bpmNum)
+                print(CalcBPM().findNearbyValues(dictionary: tracksWithTempo, input: self.bpmNum))
             }
         }
     }
@@ -179,6 +186,11 @@ struct SpotifyView: View {
             completion(trackDetails.tempo)
         }
     }
+    
+    
+    
+    
+    
 }
 
 struct WebViewWrapper: UIViewRepresentable {
@@ -223,4 +235,8 @@ struct WebViewWrapper: UIViewRepresentable {
             }
         }
     }
+}
+
+#Preview {
+    SpotifyView()
 }
