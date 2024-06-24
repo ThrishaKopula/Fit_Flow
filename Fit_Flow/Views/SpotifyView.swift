@@ -23,8 +23,7 @@ struct SpotifyView: View {
                     }
             } else {
                 ZStack {
-                    Color.white.edgesIgnoringSafeArea(.all) // Background color
-                    
+                    Color("bkColor").ignoresSafeArea()
                     
                     GeometryReader { geometry in
                         VStack {
@@ -39,7 +38,7 @@ struct SpotifyView: View {
                                     .overlay(
                                         VStack {
                                             Image(systemName: "heart.fill")
-                                                .foregroundColor(.red)
+                                                .foregroundColor(Color("buttonColor"))
                                                 .padding()
                                                 .font(.system(size: 40))
                                             Text(bpm)
@@ -64,6 +63,7 @@ struct SpotifyView: View {
                         .foregroundColor(.gray)
                         .padding(.top, 20)
                 } else {
+                    
                     List(currMatchTracks.sorted(by: { $0.key < $1.key }), id: \.key) { trackID, tempo in
                         Text("\(trackID) - \(tempo) BPM")
                     }
