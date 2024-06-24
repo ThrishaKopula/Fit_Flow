@@ -11,6 +11,7 @@ struct SpotifyView: View {
     @State private var currentTrack: Track?
     @State private var isPlaying = false
     @State private var currMatchTracks: [String: Int] = [:]
+    @State private var timer: Timer?
 
     var body: some View {
         VStack {
@@ -24,8 +25,12 @@ struct SpotifyView: View {
                 ZStack {
                     Color.white.edgesIgnoringSafeArea(.all) // Background color
                     
+                    
                     GeometryReader { geometry in
                         VStack {
+                            Text("FitFlow") // Title on top
+                                .font(.title).fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                                .padding(.top, 20)
                             HStack {
                                 Spacer()
                                 Color(uiColor: .systemGray6)
@@ -48,58 +53,50 @@ struct SpotifyView: View {
                                     .padding(.trailing, 20)
                             }
                             Spacer()
-                            
                         }
                     }
                 }
-                List(currMatchTracks.sorted(by: { $0.key < $1.key }), id: \.key) { trackID, tempo in
-                    Text("\(trackID) - \(tempo) BPM")
+                Text("Track List") // Title for the List
+                    .font(.title2).fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                    .padding(.top, 20)
+                if currMatchTracks.isEmpty {
+                    Text("No track matching BPM")
+                        .foregroundColor(.gray)
+                        .padding(.top, 20)
+                } else {
+                    List(currMatchTracks.sorted(by: { $0.key < $1.key }), id: \.key) { trackID, tempo in
+                        Text("\(trackID) - \(tempo) BPM")
+                    }
                 }
             }
         }
         .onAppear {
-            HealthManager.shared.fetchHeartRate { rate in
-                DispatchQueue.main.async {
-                    self.bpm = "\(Int(rate ?? 0)) BPM"
-                    self.bpmNum = Int(rate ?? 0)
-                    print("Heart rate fetched: \(self.bpm)")
-                }
+            startTimer()
+            didReceiveSpotifyToken() // Call once on appear to fetch playlists initially
+        }
+        .onDisappear {
+            timer?.invalidate() // Stop timer when view disappears
+            timer = nil
+        }
+    }
+    
+    private func startTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
+            fetchHeartRate()
+        }
+        fetchHeartRate() // Fetch initially when starting the timer
+    }
+
+    private func fetchHeartRate() {
+        HealthManager.shared.fetchHeartRate { rate in
+            DispatchQueue.main.async {
+                self.bpm = "\(Int(rate ?? 70)) BPM"
+                self.bpmNum = Int(rate ?? 70)
+                print("Heart rate fetched: \(self.bpm)")
             }
         }
     }
 
-    //fetches for all the playlists
-//    func didReceiveSpotifyToken() {
-//        SpotifyService.shared.getUserPlaylists { playlists in
-//            guard let playlists = playlists else {
-//                DispatchQueue.main.async {
-//                    print("Failed to fetch playlists")
-//                }
-//                return
-//            }
-//
-//            DispatchQueue.main.async {
-//                if playlists.isEmpty {
-//                    print("No playlists found")
-//                    return
-//                }
-//
-//                let group = DispatchGroup()
-//
-//                for playlist in playlists {
-//                    group.enter()
-//                    fetchTracksAndBPM(for: playlist.id) {
-//                        group.leave()
-//                    }
-//                }
-//
-//                group.notify(queue: .main) {
-//                    print("Fetched tracks for all playlists.")
-//                    // Perform any further UI updates or actions here
-//                }
-//            }
-//        }
-//    }
     func didReceiveSpotifyToken() {
         SpotifyService.shared.getUserPlaylists { playlists in
             guard let playlists = playlists else {
@@ -138,7 +135,6 @@ struct SpotifyView: View {
             }
         }
     }
-
 
     private func fetchTracksAndBPM(for playlistID: String, completion: @escaping () -> Void) {
         SpotifyService.shared.getPlaylistTracks(playlistID: playlistID) { tracks in
@@ -186,11 +182,6 @@ struct SpotifyView: View {
             completion(trackDetails.tempo)
         }
     }
-    
-    
-    
-    
-    
 }
 
 struct WebViewWrapper: UIViewRepresentable {

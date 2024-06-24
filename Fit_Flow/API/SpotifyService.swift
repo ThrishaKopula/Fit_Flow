@@ -1,6 +1,5 @@
 import Foundation
 import Alamofire
-import SpotifyiOS
 
 class SpotifyService {
     static let shared = SpotifyService()
