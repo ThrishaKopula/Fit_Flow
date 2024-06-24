@@ -15,7 +15,7 @@
 		F61215792C28013D000C3CF0 /* FitFlow.png in Resources */ = {isa = PBXBuildFile; fileRef = F61215782C28013D000C3CF0 /* FitFlow.png */; };
 		F61215C02C28B88E000C3CF0 /* SpotifyAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61215BF2C28B88E000C3CF0 /* SpotifyAPI.swift */; };
 		F61215C22C28E20D000C3CF0 /* calcBPM.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61215C12C28E20D000C3CF0 /* calcBPM.swift */; };
-		F61215C42C292C12000C3CF0 /* FitFlowThumbnail.png in Resources */ = {isa = PBXBuildFile; fileRef = F61215C32C292C12000C3CF0 /* FitFlowThumbnail.png */; };
+		F61215C62C292ED8000C3CF0 /* FitFlowThumbnail.png in Resources */ = {isa = PBXBuildFile; fileRef = F61215C52C292ED8000C3CF0 /* FitFlowThumbnail.png */; };
 		F681127E2C26044300155423 /* Fit_FlowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F681127D2C26044300155423 /* Fit_FlowApp.swift */; };
 		F68112802C26044300155423 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F681127F2C26044300155423 /* ContentView.swift */; };
 		F68112822C26044400155423 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F68112812C26044400155423 /* Assets.xcassets */; };
@@ -55,7 +55,7 @@
 		F61215782C28013D000C3CF0 /* FitFlow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FitFlow.png; sourceTree = "<group>"; };
 		F61215BF2C28B88E000C3CF0 /* SpotifyAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAPI.swift; sourceTree = "<group>"; };
 		F61215C12C28E20D000C3CF0 /* calcBPM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calcBPM.swift; sourceTree = "<group>"; };
-		F61215C32C292C12000C3CF0 /* FitFlowThumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FitFlowThumbnail.png; sourceTree = "<group>"; };
+		F61215C52C292ED8000C3CF0 /* FitFlowThumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FitFlowThumbnail.png; sourceTree = "<group>"; };
 		F681127A2C26044300155423 /* FitFlow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FitFlow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F681127D2C26044300155423 /* Fit_FlowApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fit_FlowApp.swift; sourceTree = "<group>"; };
 		F681127F2C26044300155423 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -171,8 +171,8 @@
 			children = (
 				F681127D2C26044300155423 /* Fit_FlowApp.swift */,
 				F61215692C26AFD0000C3CF0 /* AppDelegate.swift */,
+				F61215C52C292ED8000C3CF0 /* FitFlowThumbnail.png */,
 				F61215782C28013D000C3CF0 /* FitFlow.png */,
-				F61215C32C292C12000C3CF0 /* FitFlowThumbnail.png */,
 				F61215702C26B500000C3CF0 /* API */,
 				F612156F2C26B4D8000C3CF0 /* Views */,
 				F61215732C26B63B000C3CF0 /* Cards */,
@@ -319,9 +319,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F61215C62C292ED8000C3CF0 /* FitFlowThumbnail.png in Resources */,
 				F68112852C26044400155423 /* Preview Assets.xcassets in Resources */,
 				F68112822C26044400155423 /* Assets.xcassets in Resources */,
-				F61215C42C292C12000C3CF0 /* FitFlowThumbnail.png in Resources */,
 				F61215792C28013D000C3CF0 /* FitFlow.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
