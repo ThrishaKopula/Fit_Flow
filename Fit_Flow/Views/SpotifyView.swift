@@ -5,13 +5,14 @@ import Alamofire
 struct SpotifyView: View {
     @State private var showWebView = true
     @State private var playlists: [Playlist] = []
-    @State private var tracksWithTempo: [String: Int] = [:]
+    @State private var tracksWithTempo: [String: Int] = ["looooooooooooooooooooooooooooooooooooooooooooooopong":72, "short":74]
     @State public var bpm: String = "Fetching BPM..."
     @State public var bpmNum: Int = 0
     @State private var currentTrack: Track?
     @State private var isPlaying = false
     @State private var currMatchTracks: [String: Int] = [:]
     @State private var timer: Timer?
+    @State private var isHeartPulsing = false
 
     var body: some View {
         VStack {
@@ -22,52 +23,87 @@ struct SpotifyView: View {
                         didReceiveSpotifyToken()
                     }
             } else {
-                ZStack {
-                    Color("bkColor").ignoresSafeArea()
-                    
-                    GeometryReader { geometry in
-                        VStack {
-                            Text("FitFlow") // Title on top
-                                .font(.title).fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                                .padding(.top, 20)
-                            HStack {
-                                Spacer()
-                                Color(uiColor: .systemGray6)
-                                    .cornerRadius(20)
-                                    .shadow(radius: 5)
-                                    .overlay(
-                                        VStack {
-                                            Image(systemName: "heart.fill")
-                                                .foregroundColor(Color("buttonColor"))
-                                                .padding()
-                                                .font(.system(size: 40))
-                                            Text(bpm)
-                                                .foregroundColor(.black)
-                                                .bold()
-                                                .font(.system(size: 30))
+                VStack {
+                    ZStack {
+                        Color("bkColor").ignoresSafeArea()
+                        
+                        GeometryReader { geometry in
+                            VStack {
+                                HStack(alignment: .center) {
+                                    Spacer()
+                                    
+                                    Image("FitFlow")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 50, height: 50)
+                                    
+                                    Text("FitFlow")
+                                        .font(.title)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(Color("textColor"))
+                                    
+                                    Spacer()
+                                }
+                                HStack {
+                                    Spacer()
+                                    Color(uiColor: .systemGray6)
+                                        .cornerRadius(20)
+                                        .shadow(radius: 5)
+                                        .overlay(
+                                            VStack {
+                                                Image(systemName: "heart.fill")
+                                                    .foregroundColor(Color("buttonColor"))
+                                                    .padding()
+                                                    .font(.system(size: 40))
+                                                    .scaleEffect(isHeartPulsing ? 1.2 : 1.0) // Scale effect for pulsing animation
+                                                    .animation(Animation.easeInOut(duration: 0.5).repeatForever(autoreverses: true)) // Animation modifier
+                                                Text(bpm)
+                                                    .foregroundColor(Color("textColor"))
+                                                    .bold()
+                                                    .font(.system(size: 30))
+                                            }
+                                        )
+                                        .frame(width: 150, height: 150)
+                                        .padding(.top, 20)
+                                        .padding(.trailing, 20)
+                                        .onAppear {
+                                            self.isHeartPulsing.toggle() // Start pulsing animation on appear
                                         }
-                                    )
-                                    .frame(width: 150, height: 150)
-                                    .padding(.top, 20)
-                                    .padding(.trailing, 20)
+                                }
+                                Spacer()
                             }
-                            Spacer()
                         }
                     }
-                }
-                Text("Track List") // Title for the List
-                    .font(.title2).fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                    .padding(.top, 20)
-                if currMatchTracks.isEmpty {
-                    Text("No track matching BPM")
-                        .foregroundColor(.gray)
+                    .background(Color("bkColor")) // Background color for the ZStack
+                    Divider()
+                    Text("Track List") // Title for the List
+                        .font(.title2).fontWeight(.bold)
                         .padding(.top, 20)
-                } else {
-                    
-                    List(currMatchTracks.sorted(by: { $0.key < $1.key }), id: \.key) { trackID, tempo in
-                        Text("\(trackID) - \(tempo) BPM")
+                        .foregroundColor(Color("textColor"))
+                    if currMatchTracks.isEmpty {
+                        Text("No track matching BPM")
+                            .foregroundColor(.gray)
+                            .padding(.top, 20)
+                    } else {
+                        List(currMatchTracks.sorted(by: { $0.key < $1.key }), id: \.key) { trackID, tempo in
+                            HStack {
+                                Text(trackID)
+                                    .fontWeight(.bold)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .lineLimit(1) // Limit the number of lines to 1
+                                    .truncationMode(.tail) // Truncate with ... at the end if text overflows
+                                
+                                Text("\(tempo) BPM")
+                                    .fontWeight(.bold)
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
+                                
+                            }
+                        }
+                        .listStyle(PlainListStyle()) 
+                      
                     }
                 }
+                .background(Color("bkColor")) // Background color for the outer VStack
             }
         }
         .onAppear {
@@ -152,7 +188,6 @@ struct SpotifyView: View {
                     if let tempo = tempo {
                         DispatchQueue.main.async {
                             self.tracksWithTempo[track.track.name] = Int(tempo)
-//                            print("Track Name: \(track.track.id), Tempo: \(tempo)")
                         }
                     } else {
                         print("Failed to fetch track details for \(track.track.name)")
